@@ -1,3 +1,9 @@
+// Supabase İstemci Bağlantısı
+const SUPABASE_URL = 'https://kmgimndbuwcbjdzswzpp.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImttZ2ltbmRidXdjYnpkenN3enBwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc5OTk0NjAsImV4cCI6MjEwMzU3NTQ2MH0.2BNgH8iHRqU8s4jbUU-c2k76dWJlssbxkygTyIeQNmw';
+
+const { createClient } = supabase;
+const _supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 /* ================================================================
    AVALANCHE GAMING — Main Application JavaScript
    CS 1.6 JailBreak Community
