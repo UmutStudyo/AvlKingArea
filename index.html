@@ -1,0 +1,1385 @@
+<!DOCTYPE html>
+<html lang="tr" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Avalanche Gaming — CS 1.6 JailBreak Community</title>
+  <meta name="description" content="Avalanche Gaming — Türkiye'nin önde gelen CS 1.6 JailBreak topluluğu." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎮</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/pages.css" />
+  <link rel="stylesheet" href="css/forum.css" />
+</head>
+<body>
+
+<!-- LOADING SCREEN -->
+<div id="loading-screen">
+  <div class="loader-logo">Avalanche Gaming</div>
+  <div class="loader-bar-wrap"><div class="loader-bar"></div></div>
+  <div class="loader-text">CS 1.6 JailBreak Community · Yükleniyor...</div>
+</div>
+
+<div class="bg-mesh"></div>
+<div id="toast-container"></div>
+
+<!-- CONFIRM MODAL -->
+<div class="confirm-modal-backdrop" id="confirm-modal">
+  <div class="confirm-modal">
+    <div class="confirm-icon">⚠️</div>
+    <div class="confirm-title" id="confirm-title">Çıkış Yap</div>
+    <div class="confirm-desc"  id="confirm-desc">Çıkış yapmak istediğinizden emin misiniz?</div>
+    <div class="confirm-btns">
+      <button class="btn btn-ghost"   onclick="closeConfirm()">Vazgeç</button>
+      <button class="btn btn-danger"  id="confirm-ok-btn">Çıkış Yap</button>
+    </div>
+  </div>
+</div>
+
+<!-- NOTIFICATION PANEL -->
+<div class="notif-panel" id="notif-panel">
+  <div class="notif-panel-header">
+    <span>Bildirimler</span>
+    <button class="btn btn-sm btn-ghost" onclick="document.getElementById('notif-panel').classList.remove('open')" style="padding:4px 8px"><i class="fa-solid fa-times"></i></button>
+  </div>
+  <div class="notif-item">
+    <div class="notif-icon"><i class="fa-solid fa-star"></i></div>
+    <div><div class="notif-text"><strong>Hoş geldin!</strong><br>Avalanche Gaming'e katıldığın için teşekkürler.</div><div class="notif-time">Az önce</div></div>
+  </div>
+  <div class="notif-item">
+    <div class="notif-icon" style="background:rgba(16,185,129,.15);color:var(--success)"><i class="fa-solid fa-bullhorn"></i></div>
+    <div><div class="notif-text"><strong>Duyuru</strong><br>Sunucu güncellemesi yakında yapılacak.</div><div class="notif-time">1 saat önce</div></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     NAVBAR
+══════════════════════════════════════════ -->
+<nav class="navbar" id="navbar">
+  <span class="nav-logo" onclick="showPage('home')">Avalanche Gaming</span>
+
+  <div class="nav-links" id="nav-links">
+    <span class="nav-link active" id="nav-home"        onclick="showPage('home')">Ana Sayfa</span>
+    <span class="nav-link"       id="nav-about"        onclick="showPage('about')">Hakkımızda</span>
+    <span class="nav-link"       id="nav-rules"        onclick="showPage('rules')">Kurallar</span>
+    <span class="nav-link"       id="nav-announcements"onclick="showPage('announcements')">Duyurular</span>
+    <span class="nav-link"       id="nav-staff"        onclick="showPage('staff')">Kadro</span>
+    <span class="nav-link"       id="nav-market"       onclick="showPage('market')">Market</span>
+    <span class="nav-link"       id="nav-gallery"      onclick="showPage('gallery')">Galeri</span>
+    <span class="nav-link"       id="nav-contact"      onclick="showPage('contact')">İletişim</span>
+    <span class="nav-link-forum" id="nav-forum"        onclick="showPage('forum')">Forum Alanı</span>
+  </div>
+
+  <div class="nav-right">
+    <button class="notif-btn" id="notif-btn" onclick="toggleNotif()" title="Bildirimler">
+      <i class="fa-solid fa-bell"></i>
+      <span class="notif-badge" id="notif-badge"></span>
+    </button>
+    <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()" title="Tema">
+      <i class="fa-solid fa-moon" id="theme-icon"></i>
+    </button>
+    <button class="account-btn" id="account-btn" onclick="toggleAccountMenu()">
+      <div class="account-avatar" id="account-avatar"><i class="fa-solid fa-user"></i></div>
+      <span id="account-label">Hesap</span>
+      <i class="fa-solid fa-chevron-down" style="font-size:.6rem;color:var(--text-muted)"></i>
+      <div class="account-dropdown" id="account-dropdown">
+        <div id="guest-menu">
+          <div class="acc-menu-item" onclick="showPage('login')"><i class="fa-solid fa-right-to-bracket"></i> Giriş Yap</div>
+          <div class="acc-menu-item" onclick="showPage('register')"><i class="fa-solid fa-user-plus"></i> Kayıt Ol</div>
+        </div>
+        <div id="user-menu" style="display:none">
+          <div class="acc-menu-item" onclick="showDashboard('dashboard')"><i class="fa-solid fa-gauge"></i> Dashboard</div>
+          <div class="acc-menu-item" onclick="showDashboard('account')"><i class="fa-solid fa-user-gear"></i> Hesabım</div>
+          <div class="acc-divider"></div>
+          <div class="acc-menu-item logout" onclick="askLogout()"><i class="fa-solid fa-right-from-bracket"></i> Çıkış Yap</div>
+        </div>
+      </div>
+    </button>
+    <button class="hamburger" id="hamburger" onclick="toggleMobileNav()">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- MOBILE NAV -->
+<nav class="mobile-nav" id="mobile-nav">
+  <div class="mobile-nav-link active" onclick="showPage('home');closeMobileNav()"><i class="fa-solid fa-house"></i> Ana Sayfa</div>
+  <div class="mobile-nav-link" onclick="showPage('about');closeMobileNav()"><i class="fa-solid fa-info-circle"></i> Hakkımızda</div>
+  <div class="mobile-nav-link" onclick="showPage('rules');closeMobileNav()"><i class="fa-solid fa-book"></i> Kurallar</div>
+  <div class="mobile-nav-link" onclick="showPage('announcements');closeMobileNav()"><i class="fa-solid fa-bullhorn"></i> Duyurular</div>
+  <div class="mobile-nav-link" onclick="showPage('staff');closeMobileNav()"><i class="fa-solid fa-shield-halved"></i> Kadro</div>
+  <div class="mobile-nav-link" onclick="showPage('market');closeMobileNav()"><i class="fa-solid fa-store"></i> Market</div>
+  <div class="mobile-nav-link" onclick="showPage('gallery');closeMobileNav()"><i class="fa-solid fa-images"></i> Galeri</div>
+  <div class="mobile-nav-link" onclick="showPage('contact');closeMobileNav()"><i class="fa-solid fa-envelope"></i> İletişim</div>
+  <div style="height:1px;background:var(--border);margin:6px 12px"></div>
+  <div class="mobile-nav-link" onclick="showPage('forum');closeMobileNav()"><i class="fa-solid fa-comments"></i> Forum Alanı</div>
+  <div style="height:1px;background:var(--border);margin:6px 12px"></div>
+  <div class="mobile-nav-link" onclick="showPage('login');closeMobileNav()"><i class="fa-solid fa-right-to-bracket"></i> Giriş Yap</div>
+  <div class="mobile-nav-link" onclick="showPage('register');closeMobileNav()"><i class="fa-solid fa-user-plus"></i> Kayıt Ol</div>
+</nav>
+
+<!-- ══════════════════════════════════════════
+     MAIN CONTENT
+══════════════════════════════════════════ -->
+<main class="main-content">
+
+<!-- ═══════ HOME ═══════ -->
+<div class="page active" id="page-home">
+  <!-- Hero -->
+  <section class="hero section">
+    <div class="hero-bg">
+      <div class="hero-orb hero-orb-1"></div>
+      <div class="hero-orb hero-orb-2"></div>
+      <div class="hero-grid-lines"></div>
+    </div>
+    <div class="container">
+      <div class="hero-split page-transition-enter">
+        <!-- Left: Community content -->
+        <div class="hero-left">
+          <div class="hero-badge"><span class="hero-badge-dot"></span> CS 1.6 JAILBREAK TOPLULUĞU</div>
+          <h1 class="hero-title">
+            Avalanche<br>
+            <span class="gradient-text">Gaming</span>
+          </h1>
+          <p class="hero-desc">
+            Türkiye'nin en köklü CS 1.6 JailBreak topluluğuna hoş geldin. Eğlenceli sunucular, güçlü topluluk ve rekabetçi atmosfer burada seni bekliyor.
+          </p>
+          <div class="hero-actions">
+            <button class="btn btn-primary btn-lg" onclick="showPage('register')"><i class="fa-solid fa-rocket"></i> Topluluğa Katıl</button>
+            <button class="btn btn-outline btn-lg" onclick="showPage('about')"><i class="fa-solid fa-info-circle"></i> Hakkımızda</button>
+          </div>
+          <div class="hero-stats">
+            <div><div class="hero-stat-num" id="hs-members">—</div><div class="hero-stat-label">Toplam Üye</div></div>
+            <div><div class="hero-stat-num" id="hs-topics">—</div><div class="hero-stat-label">Toplam Konu</div></div>
+            <div><div class="hero-stat-num" id="hs-posts">—</div><div class="hero-stat-label">Toplam Yorum</div></div>
+            <div><div class="hero-stat-num" id="hs-moderators">—</div><div class="hero-stat-label">Moderatör</div></div>
+          </div>
+        </div>
+        <!-- Right: Live server status -->
+        <div class="hero-right">
+          <div class="server-status-card" id="hero-server-card">
+            <div class="ssc-header">
+              <div class="ssc-title-row">
+                <div class="ssc-badge-dot" id="ssc-dot"></div>
+                <span class="ssc-title">Canlı Sunucu Durumu</span>
+              </div>
+              <span class="ssc-refresh" onclick="fetchServerStatus()" title="Yenile"><i class="fa-solid fa-rotate"></i></span>
+            </div>
+            <div class="ssc-name"><i class="fa-solid fa-shield-halved"></i> Avalanche JailBreak</div>
+            <div class="ssc-ip"><i class="fa-solid fa-server"></i> <span id="ssc-ip-text">95.173.173.140</span></div>
+            <div class="ssc-status-row">
+              <div class="ssc-stat">
+                <div class="ssc-stat-label">Durum</div>
+                <div class="ssc-stat-val" id="ssc-status"><i class="fa-solid fa-spinner fa-spin"></i></div>
+              </div>
+              <div class="ssc-stat">
+                <div class="ssc-stat-label">Oyuncular</div>
+                <div class="ssc-stat-val" id="ssc-players">—</div>
+              </div>
+              <div class="ssc-stat">
+                <div class="ssc-stat-label">Harita</div>
+                <div class="ssc-stat-val" id="ssc-map">—</div>
+              </div>
+              <div class="ssc-stat">
+                <div class="ssc-stat-label">Ping</div>
+                <div class="ssc-stat-val" id="ssc-ping">—</div>
+              </div>
+            </div>
+            <div class="ssc-player-list" id="ssc-player-list"></div>
+            <a class="btn btn-primary ssc-connect-btn" href="steam://connect/95.173.173.140" onclick="this.href='steam://connect/95.173.173.140'">
+              <i class="fa-solid fa-plug"></i> Sunucuya Bağlan
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Community Stats -->
+  <section class="community-stats">
+    <div class="container">
+      <div class="cs-header">
+        <h2 class="section-title">Topluluk <span class="gradient-text">İstatistikleri</span></h2>
+        <p class="section-subtitle">Gerçek zamanlı topluluk verileri</p>
+      </div>
+      <div class="stats-grid-6">
+        <div class="stat-card">
+          <div class="stat-card-icon-wrap"><i class="fa-solid fa-users"></i></div>
+          <span class="stat-value" id="stat-members">—</span>
+          <div class="stat-label">Toplam Üye</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-icon-wrap" style="background:rgba(34,197,94,.12);color:#22c55e"><i class="fa-solid fa-crown"></i></div>
+          <span class="stat-value" id="stat-founders">—</span>
+          <div class="stat-label">Toplam Kurucu</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-icon-wrap" style="background:rgba(56,189,248,.12);color:#38bdf8"><i class="fa-solid fa-shield-halved"></i></div>
+          <span class="stat-value" id="stat-moderators">—</span>
+          <div class="stat-label">Toplam Moderatör</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-icon-wrap" style="background:rgba(236,72,153,.12);color:#ec4899"><i class="fa-solid fa-comments"></i></div>
+          <span class="stat-value" id="stat-topics">—</span>
+          <div class="stat-label">Toplam Konu</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-icon-wrap" style="background:rgba(245,158,11,.12);color:#f59e0b"><i class="fa-solid fa-pen-to-square"></i></div>
+          <span class="stat-value" id="stat-posts">—</span>
+          <div class="stat-label">Toplam Yorum</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-icon-wrap" style="background:rgba(251,191,36,.12);color:#fbbf24"><i class="fa-solid fa-trophy"></i></div>
+          <span class="stat-value">2025</span>
+          <div class="stat-label">Kuruluş Tarihi</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Server Info -->
+  <section class="server-info section">
+    <div class="container">
+      <div class="server-card">
+        <div>
+          <div class="server-badge"><span class="badge badge-accent">🎮 JailBreak</span></div>
+          <h2 class="server-title">Avalanche <span class="gradient-text">JailBreak</span></h2>
+          <p class="server-desc">Counter-Strike 1.6 JailBreak, gardiyanların mahkumları yönettiği, eğlenceli mini oyunlar ve kurallarla dolu benzersiz bir oyun modudur. Avalanche Gaming bu deneyimi en iyi şekilde sunmak için burada.</p>
+          <div class="hero-actions" style="margin-top:0">
+            <button class="btn btn-primary" onclick="showPage('rules')"><i class="fa-solid fa-book"></i> Kuralları Oku</button>
+            <button class="btn btn-ghost" onclick="showPage('contact')"><i class="fa-solid fa-headset"></i> İletişim</button>
+          </div>
+        </div>
+        <div>
+          <div class="server-details">
+            <div class="server-detail-item">
+              <i class="fa-solid fa-gamepad"></i>
+              <div><div class="server-detail-label">Oyun</div><div class="server-detail-val">Counter-Strike 1.6</div></div>
+            </div>
+            <div class="server-detail-item">
+              <i class="fa-solid fa-shield-halved"></i>
+              <div><div class="server-detail-label">Mod</div><div class="server-detail-val">JailBreak</div></div>
+            </div>
+            <div class="server-detail-item">
+              <i class="fa-brands fa-teamspeak"></i>
+              <div><div class="server-detail-label">TeamSpeak 3</div><div class="server-detail-val">Avalanche</div></div>
+            </div>
+            <div class="server-detail-item">
+              <i class="fa-solid fa-users"></i>
+              <div><div class="server-detail-label">Topluluk</div><div class="server-detail-val">Aktif & Büyüyen</div></div>
+            </div>
+            <div class="server-detail-item">
+              <i class="fa-solid fa-clock"></i>
+              <div><div class="server-detail-label">Destek</div><div class="server-detail-val">7/24</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Reviews -->
+  <section class="reviews-section">
+    <div class="container">
+      <h2 class="section-title">Üye <span class="gradient-text">Görüşleri</span></h2>
+      <p class="section-subtitle">Topluluğumuzdan gerçek görüşler</p>
+      <div class="reviews-grid">
+        <div class="review-card">
+          <div class="review-header">
+            <div class="reviewer-avatar">MK</div>
+            <div><div class="reviewer-name">MertKaya99</div><div class="reviewer-game">JailBreak Oyuncusu</div></div>
+          </div>
+          <div class="review-stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+          <p class="review-text">"Avalanche Gaming gerçekten kaliteli bir topluluk. Admin ekibi çok profesyonel ve sunucu her zaman stabil çalışıyor."</p>
+        </div>
+        <div class="review-card">
+          <div class="review-header">
+            <div class="reviewer-avatar" style="background:linear-gradient(135deg,#15803d,#166534)">xS</div>
+            <div><div class="reviewer-name">xSniper_TR</div><div class="reviewer-game">Veteran Üye</div></div>
+          </div>
+          <div class="review-stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-regular fa-star"></i></div>
+          <p class="review-text">"CS 1.6 JailBreak deneyimi için en doğru adres. Topluluk çok aktif, her gece eğlenceli maçlar oynanıyor."</p>
+        </div>
+        <div class="review-card">
+          <div class="review-header">
+            <div class="reviewer-avatar" style="background:linear-gradient(135deg,#16a34a,#4ade80)">ZD</div>
+            <div><div class="reviewer-name">ZeynepD</div><div class="reviewer-game">Aktif Üye</div></div>
+          </div>
+          <div class="review-stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+          <p class="review-text">"Sitenin tasarımı çok modern ve kullanımı kolay. Kurallar açık, yöneticiler adil. Kesinlikle tavsiye ederim!"</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="faq-section">
+    <div class="container">
+      <h2 class="section-title" style="text-align:center;margin-bottom:8px">Sık Sorulan <span class="gradient-text">Sorular</span></h2>
+      <p class="section-subtitle" style="text-align:center;margin-bottom:40px">Aklındaki soruların cevapları</p>
+      <div class="faq-list">
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">Avalanche Gaming nedir? <i class="fa-solid fa-chevron-down faq-chevron"></i></div>
+          <div class="faq-answer">Avalanche Gaming, CS 1.6 JailBreak moduna odaklanan bir oyun topluluğudur. Aktif sunucular, güçlü admin kadrosu ve kaliteli oyun deneyimi sunar.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">JailBreak modunu nasıl oynayabilirim? <i class="fa-solid fa-chevron-down faq-chevron"></i></div>
+          <div class="faq-answer">CS 1.6'nın yüklü olması yeterli. Sunucumuzun IP adresini alarak doğrudan bağlanabilirsiniz. İletişim sayfasından bize ulaşın.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">TeamSpeak 3 zorunlu mu? <i class="fa-solid fa-chevron-down faq-chevron"></i></div>
+          <div class="faq-answer">Zorunlu değil ancak toplulukla daha iyi iletişim kurmak için önerilir. TS3 sunucumuz "Avalanche" adıyla erişilebilir durumdadır.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">Admin olmak mümkün mü? <i class="fa-solid fa-chevron-down faq-chevron"></i></div>
+          <div class="faq-answer">Evet, belli bir süre aktif olarak topluluğa katkıda bulunan üyeler admin başvurusunda bulunabilir. Kurallar sayfasını ve yetkili kurallarını incelemenizi öneririz.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFaq(this)">Premium üyelik ne sağlar? <i class="fa-solid fa-chevron-down faq-chavron"></i></div>
+          <div class="faq-answer">Premium üyelik özel rozetler, ekstra forum yetkileri ve topluluk içi ayrıcalıklar sağlar. Sadece adminler tarafından aktif edilir.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div><!-- /page-home -->
+
+<!-- ═══════ ABOUT ═══════ -->
+<div class="page" id="page-about">
+  <div class="about-page">
+    <div class="container">
+      <div class="about-hero page-transition-enter">
+        <span class="badge badge-accent" style="margin-bottom:14px;display:inline-flex">Hakkımızda</span>
+        <h1 class="about-hero-title">Avalanche <span class="gradient-text">Gaming</span></h1>
+        <p class="about-hero-desc">CS 1.6 JailBreak odaklı güçlü bir oyun topluluğu. Eğlenceli oyun ortamı, adil yönetim ve aktif topluluk anlayışıyla kurulmuş bir platformuz.</p>
+      </div>
+
+      <!-- Tarihçe kaldırıldı -->
+
+      <h2 class="section-title" style="margin-bottom:28px">Avalanche <span class="gradient-text">JailBreak</span></h2>
+      <div class="server-card" style="margin-bottom:64px">
+        <div>
+          <p style="font-size:.95rem;color:var(--text-secondary);line-height:1.8;margin-bottom:20px">Avalanche JailBreak, topluluğumuzun ana sunucusudur. CS 1.6 üzerinde çalışan bu sunucuda gardiyanlar ve mahkumlar arasında geçen, mini oyunlarla dolu eğlenceli maçlar oynanmaktadır.</p>
+          <div class="cheat-features" style="display:flex;flex-direction:column;gap:10px">
+            <div style="display:flex;gap:10px;align-items:center;font-size:.88rem;color:var(--text-secondary)"><i class="fa-solid fa-check-circle" style="color:var(--success)"></i> Aktif ve deneyimli admin kadrosu</div>
+            <div style="display:flex;gap:10px;align-items:center;font-size:.88rem;color:var(--text-secondary)"><i class="fa-solid fa-check-circle" style="color:var(--success)"></i> Adil ve şeffaf kural sistemi</div>
+            <div style="display:flex;gap:10px;align-items:center;font-size:.88rem;color:var(--text-secondary)"><i class="fa-solid fa-check-circle" style="color:var(--success)"></i> Düzenli etkinlikler ve turnuvalar</div>
+            <div style="display:flex;gap:10px;align-items:center;font-size:.88rem;color:var(--text-secondary)"><i class="fa-solid fa-check-circle" style="color:var(--success)"></i> Aktif TopluluK & TS3 kanalı</div>
+          </div>
+        </div>
+        <div>
+          <div class="server-details">
+            <div class="server-detail-item"><i class="fa-solid fa-gamepad"></i><div><div class="server-detail-label">Oyun Modu</div><div class="server-detail-val">CS 1.6 JailBreak</div></div></div>
+            <div class="server-detail-item"><i class="fa-brands fa-teamspeak"></i><div><div class="server-detail-label">TS3</div><div class="server-detail-val">Avalanche</div></div></div>
+            <div class="server-detail-item"><i class="fa-solid fa-phone"></i><div><div class="server-detail-label">WhatsApp</div><div class="server-detail-val">0535 963 21 65</div></div></div>
+          </div>
+        </div>
+      </div>
+
+      <h2 class="section-title" style="margin-bottom:28px">Değerlerimiz</h2>
+      <div class="values-grid">
+        <div class="value-card"><div class="value-icon">⚖️</div><div class="value-title">Adalet</div><p class="value-desc">Herkese eşit ve adil davranılır. Kural ihlalleri ayrım gözetilmeksizin yaptırıma uğrar.</p></div>
+        <div class="value-card"><div class="value-icon">🤝</div><div class="value-title">Topluluk</div><p class="value-desc">Birlikte güçlüyüz. Sağlıklı bir topluluk ortamı oluşturmak önceliğimizdir.</p></div>
+        <div class="value-card"><div class="value-icon">🎮</div><div class="value-title">Eğlence</div><p class="value-desc">Oyun eğlenceli olmalı. Olumlu bir oyun ortamı sağlamak için çalışıyoruz.</p></div>
+        <div class="value-card"><div class="value-icon">🛡️</div><div class="value-title">Güvenlik</div><p class="value-desc">Hile, troll ve kötü niyetli davranışlara sıfır tolerans politikası uygularız.</p></div>
+        <div class="value-card"><div class="value-icon">📈</div><div class="value-title">Gelişim</div><p class="value-desc">Sürekli gelişim ve iyileştirme. Üyelerimizin geri bildirimlerine önem veririz.</p></div>
+        <div class="value-card"><div class="value-icon">💬</div><div class="value-title">Şeffaflık</div><p class="value-desc">Kararlarımızı açıkça paylaşır, toplulukla şeffaf iletişim kurarız.</p></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ RULES ═══════ -->
+<div class="page" id="page-rules">
+  <div class="rules-page">
+    <div class="container">
+      <div class="rules-hero page-transition-enter">
+        <span class="badge badge-accent" style="margin-bottom:14px;display:inline-flex"><i class="fa-solid fa-book"></i>&nbsp;Kurallar</span>
+        <h1 class="section-title">Topluluk <span class="gradient-text">Kuralları</span></h1>
+        <p class="about-hero-desc">Avalanche Gaming'de sağlıklı bir ortam için aşağıdaki kurallara uymanız zorunludur. Kurallar tüm üyeler için geçerlidir.</p>
+      </div>
+
+      <!-- Accordion Rule Sections -->
+      <div class="rules-accordion">
+
+        <!-- Oyun Kuralları -->
+        <div class="rule-section" id="rs-game">
+          <div class="rule-section-header" onclick="toggleRuleSection('rs-game')">
+            <div class="rule-section-left">
+              <div class="rule-section-icon"><i class="fa-solid fa-gamepad"></i></div>
+              <div>
+                <div class="rule-section-title">Oyun Kuralları</div>
+                <div class="rule-section-sub">CS 1.6 JailBreak Sunucusu — 8 kural</div>
+              </div>
+            </div>
+            <div class="rule-section-meta">
+              <span class="rule-count-badge">8</span>
+              <i class="fa-solid fa-chevron-down rule-section-chevron"></i>
+            </div>
+          </div>
+          <div class="rule-section-body">
+            <div class="rule-table">
+              <div class="rule-row"><div class="rule-num">1</div><div class="rule-text">Hile, exploit veya bug kullanmak kesinlikle yasaktır. İlk tespitten kalıcı ban uygulanır.</div><div class="rule-severity high">Kalıcı Ban</div></div>
+              <div class="rule-row"><div class="rule-num">2</div><div class="rule-text">Gardiyanlar mahkumlara açık ve anlaşılır emirler vermek zorundadır. Sessiz gardiyan oynayılamaz.</div><div class="rule-severity med">Uyarı</div></div>
+              <div class="rule-row"><div class="rule-num">3</div><div class="rule-text">Küfür, hakaret ve ırkçı söylemler kesinlikle yasaktır.</div><div class="rule-severity high">Susturma</div></div>
+              <div class="rule-row"><div class="rule-num">4</div><div class="rule-text">Mahkumlar gardiyanların meşru emirlerine uymak zorundadır.</div><div class="rule-severity low">Uyarı</div></div>
+              <div class="rule-row"><div class="rule-num">5</div><div class="rule-text">Teamkill (takım öldürme) kasıtlı olarak yapılamaz.</div><div class="rule-severity med">Kick/Ban</div></div>
+              <div class="rule-row"><div class="rule-num">6</div><div class="rule-text">Mic spam, ses kirliliği ve rahatsız edici ses çıkarımı yasaktır.</div><div class="rule-severity low">Uyarı</div></div>
+              <div class="rule-row"><div class="rule-num">7</div><div class="rule-text">Admin kararlarına saygı gösterilmeli, itirazlar uygun kanaldan yapılmalıdır.</div><div class="rule-severity med">Susturma</div></div>
+              <div class="rule-row"><div class="rule-num">8</div><div class="rule-text">Reklam ve tanıtım yapmak yasaktır.</div><div class="rule-severity high">Kalıcı Ban</div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TS3 Kuralları -->
+        <div class="rule-section" id="rs-ts3">
+          <div class="rule-section-header" onclick="toggleRuleSection('rs-ts3')">
+            <div class="rule-section-left">
+              <div class="rule-section-icon" style="background:rgba(56,189,248,.12);color:var(--info)"><i class="fa-brands fa-teamspeak"></i></div>
+              <div>
+                <div class="rule-section-title">TeamSpeak 3 Kuralları</div>
+                <div class="rule-section-sub">Avalanche TS3 Sunucusu — 7 kural</div>
+              </div>
+            </div>
+            <div class="rule-section-meta">
+              <span class="rule-count-badge" style="background:rgba(56,189,248,.12);color:var(--info)">7</span>
+              <i class="fa-solid fa-chevron-down rule-section-chevron"></i>
+            </div>
+          </div>
+          <div class="rule-section-body">
+            <div class="rule-table">
+              <div class="rule-row"><div class="rule-num">1</div><div class="rule-text">Diğer kullanıcılara saygılı olmak zorunludur. Hakaret ve aşağılama kesinlikle yasaktır.</div><div class="rule-severity high">Susturma</div></div>
+              <div class="rule-row"><div class="rule-num">2</div><div class="rule-text">İzinsiz kanal oluşturmak ve kanal adlarını değiştirmek yasaktır.</div><div class="rule-severity med">Uyarı</div></div>
+              <div class="rule-row"><div class="rule-num">3</div><div class="rule-text">Ses bozucu, müzik botu veya rahatsız edici sesler yaymak yasaktır.</div><div class="rule-severity med">Kick</div></div>
+              <div class="rule-row"><div class="rule-num">4</div><div class="rule-text">Diğer kullanıcıların kanalına izinsiz taşıma yapılamaz.</div><div class="rule-severity low">Uyarı</div></div>
+              <div class="rule-row"><div class="rule-num">5</div><div class="rule-text">Yetkililere saygı gösterilmeli ve talimatlara uyulmalıdır.</div><div class="rule-severity med">Susturma</div></div>
+              <div class="rule-row"><div class="rule-num">6</div><div class="rule-text">Spam ve tekrarlayan mesajlar atmak yasaktır.</div><div class="rule-severity low">Uyarı</div></div>
+              <div class="rule-row"><div class="rule-num">7</div><div class="rule-text">Reklam içerikli mesaj veya nickname kullanmak yasaktır.</div><div class="rule-severity high">Kalıcı Ban</div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Yetkili Kuralları -->
+        <div class="rule-section" id="rs-admin">
+          <div class="rule-section-header" onclick="toggleRuleSection('rs-admin')">
+            <div class="rule-section-left">
+              <div class="rule-section-icon" style="background:rgba(245,158,11,.12);color:var(--warning)"><i class="fa-solid fa-shield-halved"></i></div>
+              <div>
+                <div class="rule-section-title">Yetkili Kuralları</div>
+                <div class="rule-section-sub">Admin & Yönetim Ekibi — 7 kural</div>
+              </div>
+            </div>
+            <div class="rule-section-meta">
+              <span class="rule-count-badge" style="background:rgba(245,158,11,.12);color:var(--warning)">7</span>
+              <i class="fa-solid fa-chevron-down rule-section-chevron"></i>
+            </div>
+          </div>
+          <div class="rule-section-body">
+            <div class="rule-table">
+              <div class="rule-row"><div class="rule-num">1</div><div class="rule-text">Yetkililer her zaman tarafsız ve adil olmak zorundadır. Arkadaş-düşman ayrımı yapılamaz.</div><div class="rule-severity high">Yetki İptali</div></div>
+              <div class="rule-row"><div class="rule-num">2</div><div class="rule-text">Yetkili gücü kötüye kullanmak (abuze) anında yetki iptaline neden olur.</div><div class="rule-severity high">Yetki İptali</div></div>
+              <div class="rule-row"><div class="rule-num">3</div><div class="rule-text">Cezalar orantılı olmalıdır. Gereksiz ve aşırı cezalar uygulanamaz.</div><div class="rule-severity med">Uyarı</div></div>
+              <div class="rule-row"><div class="rule-num">4</div><div class="rule-text">Yetkililer aktif olmak zorundadır. Uzun süreli pasiflik yetki kaybına yol açar.</div><div class="rule-severity med">İndirgeme</div></div>
+              <div class="rule-row"><div class="rule-num">5</div><div class="rule-text">Kararlar açıklanabilir ve gerekçelendirilmiş olmalıdır.</div><div class="rule-severity low">Uyarı</div></div>
+              <div class="rule-row"><div class="rule-num">6</div><div class="rule-text">Üst yönetim kararlarına saygı gösterilmeli ve itirazlar uygun şekilde iletilmelidir.</div><div class="rule-severity med">Yetki İptali</div></div>
+              <div class="rule-row"><div class="rule-num">7</div><div class="rule-text">Yetkililerin bölümünü temsil ederken topluluğun itibarını korumak zorunludur.</div><div class="rule-severity med">Uyarı</div></div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /rules-accordion -->
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ STAFF ═══════ -->
+<div class="page" id="page-staff">
+  <div style="padding:60px 0 100px">
+    <div class="container">
+      <div class="page-transition-enter" style="text-align:center;margin-bottom:40px">
+        <span class="badge badge-accent" style="margin-bottom:14px;display:inline-flex"><i class="fa-solid fa-shield-halved"></i>&nbsp;Kadro</span>
+        <h1 class="section-title">Kadromuz</h1>
+        <p class="section-subtitle" style="margin-bottom:0">Topluluğumuzu yöneten ekibimizle tanışın</p>
+      </div>
+      <div id="staff-page-list">
+        <div class="empty-state">
+          <div class="empty-icon">🛡️</div>
+          <div class="empty-title">Kadro Yükleniyor...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ ANNOUNCEMENTS ═══════ -->
+<div class="page" id="page-announcements">
+  <div style="padding:60px 0 100px">
+    <div class="container">
+      <div class="page-transition-enter" style="text-align:center;margin-bottom:40px">
+        <span class="badge badge-accent" style="margin-bottom:14px;display:inline-flex"><i class="fa-solid fa-bullhorn"></i>&nbsp;Duyurular</span>
+        <h1 class="section-title">Duyurular</h1>
+        <p class="section-subtitle" style="margin-bottom:0">Topluluk haberleri ve önemli güncellemeler</p>
+      </div>
+      <div class="empty-state">
+        <div class="empty-icon">📢</div>
+        <div class="empty-title">Henüz Duyuru Bulunmuyor</div>
+        <p class="empty-desc">Şu an için paylaşılmış bir duyuru yok. Yeni duyurular burada görünecek. Takipte kalın!</p>
+        <button class="btn btn-outline" onclick="showPage('home')"><i class="fa-solid fa-house"></i> Ana Sayfaya Dön</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ MARKET ═══════ -->
+<div class="page" id="page-market">
+  <div style="padding:60px 0 100px">
+    <div class="container">
+      <div class="page-transition-enter" style="text-align:center;margin-bottom:40px">
+        <span class="badge badge-accent" style="margin-bottom:14px;display:inline-flex"><i class="fa-solid fa-store"></i>&nbsp;Market</span>
+        <h1 class="section-title">Market</h1>
+        <p class="section-subtitle" style="margin-bottom:0">Topluluk ürünleri ve özel içerikler</p>
+      </div>
+      <div class="empty-state">
+        <div class="empty-icon">🛒</div>
+        <div class="empty-title">Henüz Ürün Bulunmuyor</div>
+        <p class="empty-desc">Market bölümüne henüz ürün eklenmedi. İleride özel skin'ler, rozetler ve daha fazlası burada olacak!</p>
+        <button class="btn btn-outline" onclick="showPage('contact')"><i class="fa-solid fa-envelope"></i> Bilgi Al</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ GALLERY ═══════ -->
+<div class="page" id="page-gallery">
+  <div style="padding:60px 0 100px">
+    <div class="container">
+      <div class="page-transition-enter" style="text-align:center;margin-bottom:40px">
+        <span class="badge badge-accent" style="margin-bottom:14px;display:inline-flex"><i class="fa-solid fa-images"></i>&nbsp;Galeri</span>
+        <h1 class="section-title">Galeri</h1>
+        <p class="section-subtitle" style="margin-bottom:0">Topluluğumuzdan en güzel anlar</p>
+      </div>
+      <div class="empty-state">
+        <div class="empty-icon">🖼️</div>
+        <div class="empty-title">Henüz Görsel Bulunmuyor</div>
+        <p class="empty-desc">Galeri bölümüne henüz görsel eklenmedi. Yakında ekran görüntüleri, etkinlik fotoğrafları ve daha fazlası burada paylaşılacak!</p>
+        <button class="btn btn-outline" onclick="showPage('home')"><i class="fa-solid fa-house"></i> Ana Sayfaya Dön</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ CONTACT ═══════ -->
+<div class="page" id="page-contact">
+  <div class="contact-page">
+    <div class="container">
+      <div class="page-transition-enter" style="text-align:center;margin-bottom:48px">
+        <span class="badge badge-accent" style="margin-bottom:14px;display:inline-flex"><i class="fa-solid fa-envelope"></i>&nbsp;İletişim</span>
+        <h1 class="section-title">İletişim</h1>
+        <p class="section-subtitle" style="margin-bottom:0">Bize ulaşmak için aşağıdaki kanalları kullanabilirsiniz</p>
+      </div>
+      <div class="contact-grid">
+        <div class="contact-card">
+          <div class="contact-card-icon"><i class="fa-brands fa-teamspeak"></i></div>
+          <div>
+            <div class="contact-card-label">TeamSpeak 3</div>
+            <div class="contact-card-value">Avalanche</div>
+            <div class="contact-card-sub">TS3 sunucumuza bağlanın</div>
+          </div>
+        </div>
+        <div class="contact-card">
+          <div class="contact-card-icon" style="background:rgba(16,185,129,.1);color:var(--success)"><i class="fa-brands fa-whatsapp"></i></div>
+          <div>
+            <div class="contact-card-label">WhatsApp</div>
+            <div class="contact-card-value">0535 963 21 65</div>
+            <div class="contact-card-sub">Mesaj gönderebilirsiniz</div>
+          </div>
+        </div>
+      </div>
+      <!-- Contact Form -->
+      <div class="card" style="max-width:560px;margin:0 auto">
+        <h3 style="font-size:1.1rem;font-weight:700;margin-bottom:4px">Mesaj Gönder</h3>
+        <p style="font-size:.85rem;color:var(--text-muted);margin-bottom:22px">Sorularınız için form aracılığıyla da ulaşabilirsiniz</p>
+        <div class="form-group">
+          <label class="form-label">İsim</label>
+          <div class="input-wrapper"><i class="fa-solid fa-user input-icon"></i><input type="text" class="form-input" placeholder="Adınız Soyadınız" /></div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">E-Posta</label>
+          <div class="input-wrapper"><i class="fa-solid fa-envelope input-icon"></i><input type="email" class="form-input" placeholder="ornek@email.com" /></div>
+        </div>
+        <div class="form-group" style="margin-bottom:20px">
+          <label class="form-label">Mesaj</label>
+          <textarea class="form-input" rows="4" placeholder="Mesajınızı yazın..." style="resize:vertical"></textarea>
+        </div>
+        <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="submitContact()"><i class="fa-solid fa-paper-plane"></i> Gönder</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ FORUM ═══════ -->
+<div class="page" id="page-forum">
+  <!-- Forum Header -->
+  <div class="forum-page-wrap">
+    <div class="forum-header-bar">
+      <div class="container">
+        <div class="forum-header-inner">
+          <div>
+            <h1 class="forum-page-title">Forum <span class="gradient-text">Alanı</span></h1>
+          </div>
+          <div class="forum-header-actions">
+            <div class="forum-search-wrap">
+              <i class="fa-solid fa-search forum-search-icon"></i>
+              <input type="text" class="forum-search-input" id="forum-search" placeholder="Konu ara..." oninput="forumSearch(this.value)" />
+              <button class="forum-search-clear" onclick="clearForumSearch()" title="Temizle"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <button class="btn btn-primary" id="new-topic-btn" onclick="showNewTopicModal()" style="display:none">
+              <i class="fa-solid fa-plus"></i> Yeni Konu
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container" style="padding-top:24px;padding-bottom:60px">
+
+      <!-- Category Grid -->
+      <div class="forum-cat-grid">
+        <div class="forum-cat-box" onclick="filterByCategory(null,null,document.querySelector('.forum-tab[data-cat=\\'\\']'))">
+          <div class="fcb-icon-wrap" style="background:rgba(34,197,94,.15);color:#22c55e"><i class="fa-solid fa-list"></i></div>
+          <div class="fcb-info">
+            <div class="fcb-name">Genel</div>
+            <div class="fcb-desc">Genel konular ve sohbet</div>
+          </div>
+          <div class="fcb-stats" id="fcb-stat-genel">
+            <span><i class="fa-solid fa-pen-to-square"></i> <span class="fcb-konu">—</span> Konu</span>
+            <span><i class="fa-solid fa-comment"></i> <span class="fcb-mesaj">—</span> Mesaj</span>
+          </div>
+        </div>
+        <div class="forum-cat-box" onclick="filterByCategoryName('Haber')">
+          <div class="fcb-icon-wrap" style="background:rgba(59,130,246,.15);color:#3b82f6"><i class="fa-solid fa-newspaper"></i></div>
+          <div class="fcb-info">
+            <div class="fcb-name">Haber</div>
+            <div class="fcb-desc">Sunucu ve topluluk haberleri</div>
+          </div>
+          <div class="fcb-stats" id="fcb-stat-haber">
+            <span><i class="fa-solid fa-pen-to-square"></i> <span class="fcb-konu">—</span> Konu</span>
+            <span><i class="fa-solid fa-comment"></i> <span class="fcb-mesaj">—</span> Mesaj</span>
+          </div>
+        </div>
+        <div class="forum-cat-box" onclick="filterByCategoryName('Paylaşım')">
+          <div class="fcb-icon-wrap" style="background:rgba(168,85,247,.15);color:#a855f7"><i class="fa-solid fa-share-nodes"></i></div>
+          <div class="fcb-info">
+            <div class="fcb-name">Paylaşım</div>
+            <div class="fcb-desc">Medya ve içerik paylaşımları</div>
+          </div>
+          <div class="fcb-stats" id="fcb-stat-paylasim">
+            <span><i class="fa-solid fa-pen-to-square"></i> <span class="fcb-konu">—</span> Konu</span>
+            <span><i class="fa-solid fa-comment"></i> <span class="fcb-mesaj">—</span> Mesaj</span>
+          </div>
+        </div>
+        <div class="forum-cat-box" onclick="filterByCategoryName('Ban İtiraz')">
+          <div class="fcb-icon-wrap" style="background:rgba(239,68,68,.15);color:#ef4444"><i class="fa-solid fa-gavel"></i></div>
+          <div class="fcb-info">
+            <div class="fcb-name">Ban İtiraz</div>
+            <div class="fcb-desc">Ban kaldırma talepleri</div>
+          </div>
+          <div class="fcb-stats" id="fcb-stat-banitiraz">
+            <span><i class="fa-solid fa-pen-to-square"></i> <span class="fcb-konu">—</span> Konu</span>
+            <span><i class="fa-solid fa-comment"></i> <span class="fcb-mesaj">—</span> Mesaj</span>
+          </div>
+        </div>
+        <div class="forum-cat-box" onclick="filterByCategoryName('Reklam')">
+          <div class="fcb-icon-wrap" style="background:rgba(245,158,11,.15);color:#f59e0b"><i class="fa-solid fa-bullhorn"></i></div>
+          <div class="fcb-info">
+            <div class="fcb-name">Reklam</div>
+            <div class="fcb-desc">Tanıtım ve reklam alanı</div>
+          </div>
+          <div class="fcb-stats" id="fcb-stat-reklam">
+            <span><i class="fa-solid fa-pen-to-square"></i> <span class="fcb-konu">—</span> Konu</span>
+            <span><i class="fa-solid fa-comment"></i> <span class="fcb-mesaj">—</span> Mesaj</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Category Tabs -->
+      <div class="forum-tabs" id="forum-tabs"></div>
+
+      <!-- Topics Table -->
+      <div id="forum-topics-list">
+        <div class="forum-loading"><i class="fa-solid fa-spinner fa-spin"></i> Yükleniyor...</div>
+      </div>
+
+      <!-- Pagination -->
+      <div class="forum-pagination" id="forum-pagination"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ CREATE TOPIC PAGE ═══════ -->
+<div class="page" id="page-create-topic">
+  <div id="create-topic-wrap"></div>
+</div>
+
+<!-- ═══════ USER PROFILE PAGE ═══════ -->
+<div class="page" id="page-user-profile">
+  <div id="user-profile-wrap"></div>
+</div>
+
+<!-- ═══════ TOPIC DETAIL ═══════ -->
+<div class="page" id="page-topic">
+  <div class="forum-page-wrap">
+    <div class="container" style="padding-top:24px;padding-bottom:80px">
+      <button class="btn btn-ghost btn-sm" onclick="backToForum()" style="margin-bottom:18px">
+        <i class="fa-solid fa-arrow-left"></i> Foruma Dön
+      </button>
+      <div id="topic-detail-wrap">
+        <div class="forum-loading"><i class="fa-solid fa-spinner fa-spin"></i></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- NEW TOPIC MODAL -->
+<div class="modal-backdrop" id="new-topic-modal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3>Yeni Konu Oluştur</h3>
+      <button onclick="closeModal('new-topic-modal')"><i class="fa-solid fa-times"></i></button>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Başlık *</label>
+      <input type="text" class="form-input" id="nt-title" placeholder="Konu başlığı" maxlength="120" />
+    </div>
+    <div class="form-group">
+      <label class="form-label">Kategori *</label>
+      <select class="form-input" id="nt-category" style="padding-left:14px"></select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">İçerik *</label>
+      <div class="rich-toolbar">
+        <button type="button" onclick="rtCmd('bold')" title="Kalın"><i class="fa-solid fa-bold"></i></button>
+        <button type="button" onclick="rtCmd('italic')" title="İtalik"><i class="fa-solid fa-italic"></i></button>
+        <button type="button" onclick="rtInsertLink()" title="Link"><i class="fa-solid fa-link"></i></button>
+        <button type="button" onclick="toggleEmojiPickerRT('nt-content')" title="Emoji"><i class="fa-regular fa-face-smile"></i></button>
+      </div>
+      <div class="rich-editor" id="nt-content" contenteditable="true" data-placeholder="Konu içeriğini yazın..."></div>
+      <div class="emoji-picker" id="nt-content-emoji"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('new-topic-modal')">Vazgeç</button>
+      <button class="btn btn-primary" onclick="submitNewTopic()"><i class="fa-solid fa-paper-plane"></i> Gönder</button>
+    </div>
+  </div>
+</div>
+
+<!-- EDIT TOPIC MODAL -->
+<div class="modal-backdrop" id="edit-topic-modal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3>Konuyu Düzenle</h3>
+      <button onclick="closeModal('edit-topic-modal')"><i class="fa-solid fa-times"></i></button>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Başlık</label>
+      <input type="text" class="form-input" id="et-title" maxlength="120" />
+    </div>
+    <div class="form-group">
+      <label class="form-label">Kategori</label>
+      <select class="form-input" id="et-category" style="padding-left:14px"></select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">İçerik</label>
+      <div class="rich-toolbar">
+        <button type="button" onclick="rtCmd('bold')"><i class="fa-solid fa-bold"></i></button>
+        <button type="button" onclick="rtCmd('italic')"><i class="fa-solid fa-italic"></i></button>
+        <button type="button" onclick="rtInsertLink()"><i class="fa-solid fa-link"></i></button>
+      </div>
+      <div class="rich-editor" id="et-content" contenteditable="true"></div>
+    </div>
+    <input type="hidden" id="et-topic-id" />
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('edit-topic-modal')">Vazgeç</button>
+      <button class="btn btn-primary" onclick="submitEditTopic()"><i class="fa-solid fa-save"></i> Kaydet</button>
+    </div>
+  </div>
+</div>
+
+<!-- REPLY EDIT MODAL -->
+<div class="modal-backdrop" id="edit-reply-modal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3>Yorumu Düzenle</h3>
+      <button onclick="closeModal('edit-reply-modal')"><i class="fa-solid fa-times"></i></button>
+    </div>
+    <div class="form-group">
+      <div class="rich-toolbar">
+        <button type="button" onclick="rtCmd('bold')"><i class="fa-solid fa-bold"></i></button>
+        <button type="button" onclick="rtCmd('italic')"><i class="fa-solid fa-italic"></i></button>
+        <button type="button" onclick="rtInsertLink()"><i class="fa-solid fa-link"></i></button>
+        <button type="button" onclick="toggleEmojiPickerRT('er-content')"><i class="fa-regular fa-face-smile"></i></button>
+      </div>
+      <div class="rich-editor" id="er-content" contenteditable="true"></div>
+      <div class="emoji-picker" id="er-content-emoji"></div>
+    </div>
+    <input type="hidden" id="er-reply-id" />
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('edit-reply-modal')">Vazgeç</button>
+      <button class="btn btn-primary" onclick="submitEditReply()"><i class="fa-solid fa-save"></i> Kaydet</button>
+    </div>
+  </div>
+</div>
+
+<!-- REPORT MODAL -->
+<div class="modal-backdrop" id="report-modal">
+  <div class="modal-box" style="max-width:440px">
+    <div class="modal-header">
+      <h3>İçerik Raporla</h3>
+      <button onclick="closeModal('report-modal')"><i class="fa-solid fa-times"></i></button>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Rapor Nedeni</label>
+      <select class="form-input" id="report-reason" style="padding-left:14px">
+        <option value="spam">Spam / Reklam</option>
+        <option value="hakaret">Hakaret / Küfür</option>
+        <option value="yaniltici">Yanıltıcı Bilgi</option>
+        <option value="uygunsuz">Uygunsuz İçerik</option>
+        <option value="diger">Diğer</option>
+      </select>
+    </div>
+    <input type="hidden" id="report-target-id" />
+    <input type="hidden" id="report-target-type" />
+    <input type="hidden" id="report-target-title" />
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('report-modal')">Vazgeç</button>
+      <button class="btn btn-danger" onclick="submitReport()"><i class="fa-solid fa-flag"></i> Raporla</button>
+    </div>
+  </div>
+</div>
+
+<!-- MUTE MODAL -->
+<div class="modal-backdrop" id="mute-modal">
+  <div class="modal-box" style="max-width:400px">
+    <div class="modal-header">
+      <h3>Kullanıcıyı Sustur</h3>
+      <button onclick="closeModal('mute-modal')"><i class="fa-solid fa-times"></i></button>
+    </div>
+    <p style="font-size:.88rem;color:var(--text-secondary);margin-bottom:16px">Susturulan kullanıcı konu açamaz ve yorum yazamaz. Maksimum 3 gün.</p>
+    <div class="form-group">
+      <label class="form-label">Süre (Saat)</label>
+      <input type="number" class="form-input" id="mute-hours" min="1" max="72" value="24" />
+    </div>
+    <input type="hidden" id="mute-target-id" />
+    <input type="hidden" id="mute-target-name" />
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('mute-modal')">Vazgeç</button>
+      <button class="btn btn-danger" onclick="submitMute()"><i class="fa-solid fa-microphone-slash"></i> Sustur</button>
+    </div>
+  </div>
+</div>
+
+<!-- BAN MODAL -->
+<div class="modal-backdrop" id="ban-modal">
+  <div class="modal-box" style="max-width:400px">
+    <div class="modal-header">
+      <h3>Kullanıcıyı Uzaklaştır</h3>
+      <button onclick="closeModal('ban-modal')"><i class="fa-solid fa-times"></i></button>
+    </div>
+    <p style="font-size:.88rem;color:var(--text-secondary);margin-bottom:16px">Uzaklaştırılan kullanıcı hesabını kullanamaz. Maksimum 3 gün.</p>
+    <div class="form-group">
+      <label class="form-label">Süre (Saat)</label>
+      <input type="number" class="form-input" id="ban-hours" min="1" max="72" value="24" />
+    </div>
+    <input type="hidden" id="ban-target-id" />
+    <input type="hidden" id="ban-target-name" />
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('ban-modal')">Vazgeç</button>
+      <button class="btn btn-danger" onclick="submitBan()"><i class="fa-solid fa-ban"></i> Uzaklaştır</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ LOGIN ═══════ -->
+<div class="page" id="page-login">
+  <div class="auth-page">
+    <form class="auth-card page-transition-enter" onsubmit="doLogin();return false;">
+      <div class="auth-logo"><span class="brand">Avalanche Gaming</span></div>
+      <h2 class="auth-title">Giriş Yap</h2>
+      <p class="auth-subtitle">Hesabına giriş yap</p>
+      <div class="form-group">
+        <label class="form-label">Kullanıcı Adı veya E-Posta</label>
+        <div class="input-wrapper"><i class="fa-solid fa-user input-icon"></i><input type="text" class="form-input" id="login-user" placeholder="Kullanıcı adı veya e-posta" autocomplete="username" /></div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Şifre</label>
+        <div class="input-wrapper"><i class="fa-solid fa-lock input-icon"></i><input type="password" class="form-input" id="login-pass" placeholder="Şifreniz" autocomplete="current-password" /><span class="input-action" onclick="togglePassword('login-pass',this)"><i class="fa-solid fa-eye"></i></span></div>
+      </div>
+      <div class="captcha-box" id="login-captcha" onclick="checkCaptcha('login-captcha')" style="margin-bottom:20px">
+        <div class="captcha-checkbox" id="login-captcha-check"><i class="fa-solid fa-check" style="display:none"></i></div>
+        <span class="captcha-label">Ben robot değilim</span>
+        <div class="captcha-logo">reCAPTCHA<br><small>Gizlilik · Koşullar</small></div>
+      </div>
+      <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center"><i class="fa-solid fa-right-to-bracket"></i> Giriş Yap</button>
+      <div class="auth-switch">Hesabın yok mu? <a onclick="showPage('register')">Kayıt Ol</a></div>
+    </form>
+  </div>
+</div>
+
+<!-- ═══════ REGISTER ═══════ -->
+<div class="page" id="page-register">
+  <div class="auth-page">
+    <form class="auth-card page-transition-enter" onsubmit="doRegister();return false;">
+      <div class="auth-logo"><span class="brand">Avalanche Gaming</span></div>
+      <h2 class="auth-title">Kayıt Ol</h2>
+      <p class="auth-subtitle">Topluluğa katıl</p>
+      <div class="form-group">
+        <label class="form-label">Kullanıcı Adı</label>
+        <div class="input-wrapper"><i class="fa-solid fa-at input-icon"></i><input type="text" class="form-input" id="reg-username" placeholder="kullanici_adi" autocomplete="username" /></div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Ad Soyad</label>
+        <div class="input-wrapper"><i class="fa-solid fa-id-card input-icon"></i><input type="text" class="form-input" id="reg-fullname" placeholder="Ad Soyad" autocomplete="name" /></div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">E-Posta</label>
+        <div class="input-wrapper"><i class="fa-solid fa-envelope input-icon"></i><input type="email" class="form-input" id="reg-email" placeholder="ornek@email.com" autocomplete="email" /></div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Şifre</label>
+        <div class="input-wrapper"><i class="fa-solid fa-lock input-icon"></i><input type="password" class="form-input" id="reg-pass" placeholder="En az 8 karakter" autocomplete="new-password" oninput="checkPasswordStrength(this.value)" /><span class="input-action" onclick="togglePassword('reg-pass',this)"><i class="fa-solid fa-eye"></i></span></div>
+        <div class="password-strength">
+          <div class="strength-bars"><div class="strength-bar" id="sb1"></div><div class="strength-bar" id="sb2"></div><div class="strength-bar" id="sb3"></div><div class="strength-bar" id="sb4"></div></div>
+          <div class="strength-label" id="strength-label">Şifre gücü</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Şifre Tekrar</label>
+        <div class="input-wrapper"><i class="fa-solid fa-lock input-icon"></i><input type="password" class="form-input" id="reg-pass2" placeholder="Şifreyi tekrar girin" autocomplete="new-password" /><span class="input-action" onclick="togglePassword('reg-pass2',this)"><i class="fa-solid fa-eye"></i></span></div>
+      </div>
+      <div class="captcha-box" id="reg-captcha" onclick="checkCaptcha('reg-captcha')" style="margin-bottom:20px">
+        <div class="captcha-checkbox" id="reg-captcha-check"><i class="fa-solid fa-check" style="display:none"></i></div>
+        <span class="captcha-label">Ben robot değilim</span>
+        <div class="captcha-logo">reCAPTCHA<br><small>Gizlilik · Koşullar</small></div>
+      </div>
+      <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center"><i class="fa-solid fa-user-plus"></i> Kayıt Ol</button>
+      <div class="auth-switch">Zaten hesabın var mı? <a onclick="showPage('login')">Giriş Yap</a></div>
+    </form>
+  </div>
+</div>
+
+<!-- ═══════ DASHBOARD ═══════ -->
+<div class="page" id="page-dashboard">
+  <div class="dashboard-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-logo"><i class="fa-solid fa-shield-halved"></i> Üye Paneli</div>
+      <div class="sidebar-section-title">Genel</div>
+      <div class="sidebar-item active" id="sb-dashboard" onclick="showDashView('dashboard')"><i class="fa-solid fa-gauge"></i> Dashboard</div>
+      <div class="sidebar-item" id="sb-account"   onclick="showDashView('account')"><i class="fa-solid fa-user-gear"></i> Hesabım</div>
+      <div class="sidebar-item" id="sb-stats"     onclick="showDashView('stats')"><i class="fa-solid fa-chart-bar"></i> İstatistiklerim</div>
+      <div class="sidebar-item" id="sb-messages"  onclick="showDashView('messages')"><i class="fa-solid fa-comments"></i> Mesajlaşma<span class="sidebar-badge" id="msg-badge" style="display:none">!</span></div>
+      <div class="sidebar-section-title">Hesap</div>
+      <div class="sidebar-item" id="sb-progress" onclick="showDashView('progress')"><i class="fa-solid fa-chart-line"></i> İlerleme Seviyesi</div>
+      <div class="sidebar-item" id="sb-membership" onclick="showDashView('membership')"><i class="fa-solid fa-crown"></i> Üyelik</div>
+      <div class="sidebar-item" id="sb-support"   onclick="showDashView('support')"><i class="fa-solid fa-headset"></i> Destek</div>
+      <div class="sidebar-item logout-item" onclick="askLogout()" style="margin-top:auto"><i class="fa-solid fa-right-from-bracket"></i> Çıkış Yap</div>
+    </aside>
+
+    <!-- Dash Content -->
+    <div class="dash-content">
+
+      <!-- Dashboard View -->
+      <div class="dash-view active" id="view-dashboard">
+        <div class="dash-header">
+          <h1 class="dash-title">Merhaba, <span class="gradient-text" id="dash-username-title">Üye</span> 👋</h1>
+          <p class="dash-subtitle" id="dash-last-login">Son giriş: Az önce</p>
+        </div>
+        <div class="dash-stats-row">
+          <div class="dash-stat-card"><div class="dash-stat-label"><i class="fa-solid fa-user"></i> Kullanıcı Adı</div><div class="dash-stat-value gradient-text" id="ds-username" style="font-size:1rem">—</div></div>
+          <div class="dash-stat-card"><div class="dash-stat-label"><i class="fa-solid fa-crown"></i> Üyelik</div><div class="dash-stat-value" style="font-size:.95rem" id="ds-membership">Standart</div></div>
+          <div class="dash-stat-card"><div class="dash-stat-label"><i class="fa-solid fa-comment"></i> Forum Yorumu</div><div class="dash-stat-value gradient-text" id="ds-replies">0</div></div>
+          <div class="dash-stat-card"><div class="dash-stat-label"><i class="fa-solid fa-pen-to-square"></i> Forum Konusu</div><div class="dash-stat-value gradient-text" id="ds-topics">0</div></div>
+        </div>
+        <div class="card" style="margin-bottom:18px">
+          <h3 style="font-size:.88rem;font-weight:700;margin-bottom:12px;color:var(--text-secondary)"><i class="fa-solid fa-clock-rotate-left" style="color:var(--accent)"></i> Son İşlemler</h3>
+          <div class="activity-list" id="activity-list">
+            <div style="text-align:center;padding:20px;color:var(--text-muted);font-size:.85rem"><i class="fa-solid fa-inbox" style="font-size:1.6rem;margin-bottom:8px;display:block;opacity:.4"></i>Henüz işlem yok</div>
+          </div>
+        </div>
+      </div><!-- /view-dashboard -->
+
+      <!-- Account View -->
+      <div class="dash-view" id="view-account">
+        <div class="dash-header"><h1 class="dash-title">Hesabım</h1><p class="dash-subtitle">Profil ayarlarını yönet</p></div>
+
+        <div class="settings-section">
+          <div class="settings-section-header">Profil Fotoğrafı</div>
+          <div class="settings-body">
+            <div class="avatar-upload">
+              <div class="avatar-preview" id="acc-avatar-preview"><span id="acc-avatar-initial">?</span></div>
+              <div class="avatar-actions">
+                <label class="btn btn-ghost btn-sm" for="avatar-file-input" style="cursor:pointer"><i class="fa-solid fa-upload"></i> Dosyadan Seç</label>
+                <input type="file" id="avatar-file-input" accept=".jpg,.jpeg,.png,image/jpeg,image/png" style="display:none" onchange="previewAvatar(this)" />
+                <button class="btn btn-ghost btn-sm" onclick="openLevelAvatarPicker()"><i class="fa-solid fa-images"></i> Seviye Avatarları</button>
+                <p>Dosya: JPG / JPEG / PNG — Maks 2MB</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="settings-section" id="username-change-section">
+          <!-- Dynamically rendered by _renderUsernameSection() -->
+          <div class="settings-section-header"><i class="fa-solid fa-at"></i> Kullanıcı Adı</div>
+          <div class="settings-body">
+            <div class="input-wrapper"><i class="fa-solid fa-at input-icon"></i><input type="text" class="form-input" id="acc-username-show" readonly /></div>
+            <p style="font-size:.78rem;color:var(--text-muted);margin-top:8px"><i class="fa-solid fa-clock"></i> Yükleniyor...</p>
+          </div>
+        </div>
+
+        <!-- Ad Soyad -->
+        <div class="settings-section">
+          <div class="settings-section-header"><i class="fa-solid fa-id-card"></i> Ad Soyad</div>
+          <div class="settings-body">
+            <form onsubmit="saveFullname();return false;">
+              <div class="form-group" style="margin-bottom:16px">
+                <label class="form-label">Ad Soyad</label>
+                <div class="input-wrapper">
+                  <i class="fa-solid fa-user input-icon"></i>
+                  <input type="text" class="form-input" id="acc-fullname-input" placeholder="Adınız ve soyadınız" maxlength="60" />
+                </div>
+                <p style="font-size:.78rem;color:var(--text-muted);margin-top:6px"><i class="fa-solid fa-eye-slash"></i> Profilinde gizlenerek görüntülenir</p>
+              </div>
+              <button type="submit" class="btn btn-primary" style="padding:10px 24px;font-weight:700">
+                <i class="fa-solid fa-floppy-disk"></i> Kaydet
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Doğum Tarihi -->
+        <div class="settings-section">
+          <div class="settings-section-header"><i class="fa-solid fa-cake-candles"></i> Doğum Tarihi</div>
+          <div class="settings-body">
+            <form onsubmit="saveBirthDate();return false;">
+              <div class="form-group" style="margin-bottom:16px">
+                <label class="form-label">Doğum Tarihi</label>
+                <div class="input-wrapper">
+                  <i class="fa-solid fa-calendar input-icon"></i>
+                  <input type="date" class="form-input" id="acc-birthdate-input" />
+                </div>
+                <p style="font-size:.78rem;color:var(--text-muted);margin-top:6px"><i class="fa-solid fa-lock"></i> Bu bilgi yalnızca profil sayfanızda görünür</p>
+              </div>
+              <button type="submit" class="btn btn-primary" style="padding:10px 24px;font-weight:700">
+                <i class="fa-solid fa-floppy-disk"></i> Kaydet
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <div class="settings-section-header">E-Posta (Değiştirilemez)</div>
+          <div class="settings-body">
+            <div class="input-wrapper"><i class="fa-solid fa-envelope input-icon"></i><input type="email" class="form-input" id="acc-email-show" readonly /></div>
+            <p style="font-size:.78rem;color:var(--text-muted);margin-top:8px"><i class="fa-solid fa-lock"></i> E-posta adresi değiştirilemez</p>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <div class="settings-section-header">Şifre Değiştir</div>
+          <div class="settings-body">
+            <form onsubmit="changePassword();return false;">
+              <div class="form-group"><label class="form-label">Mevcut Şifre</label><div class="input-wrapper"><i class="fa-solid fa-lock input-icon"></i><input type="password" autocomplete="current-password" class="form-input" id="old-pass" placeholder="Mevcut şifreniz" /><span class="input-action" onclick="togglePassword('old-pass',this)"><i class="fa-solid fa-eye"></i></span></div></div>
+              <div class="form-group"><label class="form-label">Yeni Şifre</label><div class="input-wrapper"><i class="fa-solid fa-lock input-icon"></i><input type="password" autocomplete="new-password" class="form-input" id="new-pass" placeholder="Yeni şifreniz" /><span class="input-action" onclick="togglePassword('new-pass',this)"><i class="fa-solid fa-eye"></i></span></div></div>
+              <div class="form-group" style="margin-bottom:20px"><label class="form-label">Yeni Şifre Tekrar</label><div class="input-wrapper"><i class="fa-solid fa-lock input-icon"></i><input type="password" autocomplete="new-password" class="form-input" id="new-pass2" placeholder="Tekrar girin" /></div></div>
+              <button type="submit" class="btn btn-primary" style="padding:12px 28px;font-size:1rem;font-weight:700"><i class="fa-solid fa-key"></i> Güncelle</button>
+            </form>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <div class="settings-section-header"><i class="fa-solid fa-palette"></i> Kullanıcı Adı Rengi</div>
+          <div class="settings-body">
+            <p style="font-size:.84rem;color:var(--text-muted);margin-bottom:12px">Kullanıcı adın için animasyonlu gradyan rengi seç. <span style="color:var(--accent);font-weight:600">👑 Premium üyelere özel.</span></p>
+            <!-- Önizleme -->
+            <div style="margin-bottom:16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+              <span style="font-size:.82rem;color:var(--text-muted)">Önizleme:</span>
+              <div id="premium-username-preview" style="font-size:1.2rem;font-weight:800;min-height:1.6em;display:inline-block">
+                <!-- filled by applyUsernameGradient preview -->
+              </div>
+            </div>
+            <!-- Gradient grid — inline picker -->
+            <div id="settings-ppg-grid" class="settings-ppg-grid">
+              <!-- Populated by renderSettingsGradientPicker() -->
+            </div>
+            <!-- Action buttons -->
+            <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap" id="settings-ppg-actions" style="display:none">
+              <button class="btn btn-primary" style="padding:10px 22px" onclick="saveSettingsGradient()">
+                <i class="fa-solid fa-check"></i> Uygula
+              </button>
+              <button class="btn btn-ghost" style="padding:10px 22px" onclick="clearSettingsGradient()">
+                <i class="fa-solid fa-xmark"></i> Kaldır
+              </button>
+            </div>
+          </div>
+        </div>
+      </div><!-- /view-account -->
+
+      <!-- Stats View -->
+      <div class="dash-view" id="view-stats">
+        <div class="dash-header"><h1 class="dash-title">İstatistiklerim</h1><p class="dash-subtitle">Kişisel forum ve aktivite istatistikleri</p></div>
+        <div class="stats-page-grid">
+          <div class="stats-page-card"><div class="stats-page-icon">💬</div><span class="stats-page-val" id="st-messages">0</span><div class="stats-page-label">Toplam Mesajlaşma</div></div>
+          <div class="stats-page-card"><div class="stats-page-icon">📝</div><span class="stats-page-val" id="st-topics">0</span><div class="stats-page-label">Konu Açma</div></div>
+          <div class="stats-page-card"><div class="stats-page-icon">↩️</div><span class="stats-page-val" id="st-replies">0</span><div class="stats-page-label">Yanıt Verme</div></div>
+          <div class="stats-page-card"><div class="stats-page-icon">☀️</div><span class="stats-page-val" id="st-daily">0 dk</span><div class="stats-page-label">Günlük Aktiflik</div></div>
+          <div class="stats-page-card"><div class="stats-page-icon">📅</div><span class="stats-page-val" id="st-weekly">0 dk</span><div class="stats-page-label">Haftalık Aktiflik</div></div>
+        </div>
+        <div class="card">
+          <h3 style="font-size:.9rem;font-weight:700;margin-bottom:12px;color:var(--text-secondary)">Haftalık Aktivite Grafiği</h3>
+          <div class="mini-chart" id="stats-chart" style="height:100px"></div>
+          <div style="display:flex;justify-content:space-between;font-size:.68rem;color:var(--text-muted);margin-top:6px"><span>Pzt</span><span>Sal</span><span>Çar</span><span>Per</span><span>Cum</span><span>Cmt</span><span>Paz</span></div>
+        </div>
+        <div class="card" style="margin-top:16px">
+          <div style="text-align:center;padding:24px;color:var(--text-muted)">
+            <i class="fa-solid fa-circle-info" style="font-size:1.5rem;margin-bottom:8px;display:block;color:var(--accent);opacity:.7"></i>
+            <p style="font-size:.85rem">İstatistikler, ilerleyen güncellemelerde gerçek veritabanı verileriyle otomatik olarak güncellenecektir.</p>
+          </div>
+        </div>
+      </div><!-- /view-stats -->
+
+      <!-- Messages View -->
+      <div class="dash-view" id="view-messages">
+        <div class="dash-header" style="margin-bottom:10px">
+          <h1 class="dash-title">Mesajlaşma</h1>
+          <p class="dash-subtitle">Arkadaşlarınla özel mesajlaş · Grup kur</p>
+        </div>
+        <div class="msg-layout" style="height:calc(100vh - var(--navbar-h) - 110px)">
+          <!-- Friends/Groups Sidebar -->
+          <div class="msg-sidebar">
+            <!-- Top action buttons -->
+            <div class="msg-sidebar-actions">
+              <button class="msg-action-btn active" id="msg-tab-friends" onclick="switchMsgTab('friends')"><i class="fa-solid fa-user-group"></i> Arkadaşlar</button>
+              <button class="msg-action-btn" id="msg-tab-groups" onclick="switchMsgTab('groups')"><i class="fa-solid fa-people-group"></i> Gruplar</button>
+            </div>
+            <!-- Add friend / Create group -->
+            <div id="msg-friend-actions">
+              <div class="msg-add-friend">
+                <input type="text" class="msg-add-input" id="add-friend-input" placeholder="Kullanıcı adı ekle..." />
+                <button class="msg-add-btn" onclick="sendFriendRequest()" title="Arkadaş Ekle"><i class="fa-solid fa-user-plus"></i></button>
+              </div>
+            </div>
+            <div id="msg-group-actions" style="display:none">
+              <button class="btn btn-primary btn-sm" style="width:100%;justify-content:center;margin:8px 0" onclick="openCreateGroupModal()"><i class="fa-solid fa-plus"></i> Grup Oluştur</button>
+            </div>
+            <!-- Friends list -->
+            <div id="msg-friends-panel">
+              <div class="msg-friends-list" id="friends-list">
+                <div style="text-align:center;padding:24px 12px;color:var(--text-muted);font-size:.82rem"><i class="fa-solid fa-user-group" style="font-size:1.5rem;margin-bottom:8px;display:block;opacity:.3"></i>Henüz arkadaşın yok.</div>
+              </div>
+              <div class="msg-requests" id="friend-requests-panel" style="display:none">
+                <div class="msg-req-title">Gelen İstekler</div>
+                <div id="friend-requests-list"></div>
+              </div>
+            </div>
+            <!-- Groups list -->
+            <div id="msg-groups-panel" style="display:none">
+              <div class="msg-friends-list" id="groups-list">
+                <div style="text-align:center;padding:24px 12px;color:var(--text-muted);font-size:.82rem"><i class="fa-solid fa-people-group" style="font-size:1.5rem;margin-bottom:8px;display:block;opacity:.3"></i>Henüz grubun yok.</div>
+              </div>
+            </div>
+          </div>
+          <!-- Chat Area -->
+          <div class="msg-chat" id="msg-chat-area">
+            <div class="msg-empty">
+              <i class="fa-solid fa-comment-dots"></i>
+              <p>Mesajlaşmak için soldaki<br>listeden arkadaş veya grup seç</p>
+            </div>
+          </div>
+        </div>
+      </div><!-- /view-messages -->
+
+      <!-- Create Group Modal (inline overlay) -->
+      <div class="modal-backdrop" id="create-group-modal">
+        <div class="modal-box" style="max-width:460px">
+          <div class="modal-header">
+            <h3><i class="fa-solid fa-people-group"></i> Grup Oluştur</h3>
+            <button onclick="closeModal('create-group-modal')"><i class="fa-solid fa-times"></i></button>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Grup Adı *</label>
+            <input type="text" class="form-input" id="cg-name" placeholder="Grup adı" maxlength="40" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Grup Açıklaması</label>
+            <input type="text" class="form-input" id="cg-desc" placeholder="Kısa açıklama (opsiyonel)" maxlength="100" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Maksimum Üye Sayısı</label>
+            <select class="form-input" id="cg-max" style="padding-left:12px">
+              <option value="2">2 Kişi</option>
+              <option value="3">3 Kişi</option>
+              <option value="4" selected>4 Kişi (Maksimum)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" style="display:flex;align-items:center;gap:8px;cursor:pointer">
+              <input type="checkbox" id="cg-notif" checked /> Grup Bildirimleri Açık
+            </label>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Üye Ekle (Arkadaşlardan)</label>
+            <div id="cg-friends-picker" style="display:flex;flex-wrap:wrap;gap:8px;padding:10px;background:var(--bg-input);border-radius:8px;border:1px solid var(--border);min-height:44px">
+              <div style="font-size:.8rem;color:var(--text-muted)" id="cg-picker-hint">Arkadaşlar yükleniyor...</div>
+            </div>
+            <p style="font-size:.76rem;color:var(--text-muted);margin-top:6px"><i class="fa-solid fa-info-circle"></i> Seçilen kişiler gruba eklenir. Toplam üye (sen dahil) max 4.</p>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-ghost" onclick="closeModal('create-group-modal')">Vazgeç</button>
+            <button class="btn btn-primary" onclick="createGroup()"><i class="fa-solid fa-check"></i> Oluştur</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Progress View -->
+      <div class="dash-view" id="view-progress">
+        <div class="dash-header"><h1 class="dash-title">İlerleme Seviyesi</h1><p class="dash-subtitle">Forum aktivitene göre seviye kazan</p></div>
+        <div id="progress-content">
+          <div class="progress-level-card" id="progress-current-card">
+            <div class="progress-level-badge" id="progress-badge-icon"><i class="fa-solid fa-seedling"></i></div>
+            <div class="progress-level-info">
+              <div class="progress-level-name" id="progress-level-name">Yeni Üye</div>
+              <div class="progress-level-sub" id="progress-level-sub">Hoş geldin! Forum'da aktif ol ve yüksel.</div>
+              <div class="progress-bar-wrap">
+                <div class="progress-bar-fill" id="progress-bar-fill" style="width:0%"></div>
+              </div>
+              <div class="progress-bar-label" id="progress-bar-label">Sonraki seviye için konu aç veya yorum yap</div>
+            </div>
+          </div>
+          <div class="progress-tiers-grid" id="progress-tiers-grid"></div>
+        </div>
+      </div><!-- /view-progress -->
+
+      <!-- Membership View -->
+      <div class="dash-view" id="view-membership">
+        <div class="dash-header"><h1 class="dash-title">Üyelik</h1><p class="dash-subtitle">Mevcut üyelik durumun</p></div>
+        <div class="membership-page" style="padding:0 0 40px">
+          <div class="membership-card">
+            <div class="membership-crown">👑</div>
+            <div class="membership-title">Premium Üyelik</div>
+            <p class="membership-desc">Premium üyelik, topluluk içinde özel ayrıcalıklar ve rozetler sağlar. Sunucu önceliği, özel forum renkleri ve daha fazlası.</p>
+            <div class="membership-perks">
+              <div class="perk-item"><i class="fa-solid fa-check-circle"></i> Özel Premium rozeti</div>
+              <div class="perk-item"><i class="fa-solid fa-check-circle"></i> Forum'da renkli kullanıcı adı</div>
+              <div class="perk-item"><i class="fa-solid fa-check-circle"></i> Sunucu önceliği</div>
+              <div class="perk-item"><i class="fa-solid fa-check-circle"></i> Özel TS3 kanalı erişimi</div>
+              <div class="perk-item"><i class="fa-solid fa-check-circle"></i> Destek önceliği</div>
+            </div>
+            <div class="membership-info">
+              <i class="fa-solid fa-shield-halved" style="color:var(--accent)"></i>
+              <strong> Premium üyelik yalnızca adminler tarafından aktif edilir.</strong><br>
+              <span style="margin-top:4px;display:block">Talep için lütfen <span style="color:var(--accent);cursor:pointer" onclick="showDashView('support')">Destek</span> bölümünü kullanın.</span>
+            </div>
+          </div>
+        </div>
+      </div><!-- /view-membership -->
+
+      <!-- Support View -->
+      <div class="dash-view" id="view-support">
+        <div class="dash-header"><h1 class="dash-title">Destek</h1><p class="dash-subtitle">Yardım taleplerin ve destek sistemi</p></div>
+        <div class="support-layout">
+          <div class="support-form-card">
+            <h3 style="font-size:1rem;font-weight:700;margin-bottom:4px">Yeni Talep Oluştur</h3>
+            <p style="font-size:.82rem;color:var(--text-muted);margin-bottom:20px">Ekibimiz en kısa sürede yanıt verecektir</p>
+            <div class="form-group">
+              <label class="form-label">Konu</label>
+              <div class="input-wrapper"><i class="fa-solid fa-heading input-icon"></i><input type="text" class="form-input" id="support-subject" placeholder="Destek konusu" /></div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Kategori</label>
+              <select class="form-input" id="support-category" style="padding-left:16px">
+                <option value="">Kategori seçin</option>
+                <option value="genel">Genel</option>
+                <option value="teknik">Teknik Sorun</option>
+                <option value="hesap">Hesap Sorunu</option>
+                <option value="ban">Ban İtiraz</option>
+                <option value="premium">Premium Üyelik</option>
+                <option value="diger">Diğer</option>
+              </select>
+            </div>
+            <div class="form-group" style="margin-bottom:20px">
+              <label class="form-label">Açıklama</label>
+              <textarea class="form-input" id="support-desc" rows="5" placeholder="Sorununuzu detaylıca açıklayın..." style="resize:vertical"></textarea>
+            </div>
+            <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="createSupportTicket()"><i class="fa-solid fa-paper-plane"></i> Talep Gönder</button>
+          </div>
+          <div class="support-list">
+            <h3 style="font-size:1rem;font-weight:700;margin-bottom:16px">Taleplerim</h3>
+            <div id="support-tickets-list">
+              <div class="empty-state" style="padding:32px 0">
+                <div class="empty-icon" style="font-size:2.5rem">🎫</div>
+                <div class="empty-title" style="font-size:1rem">Henüz Talebiniz Yok</div>
+                <p class="empty-desc" style="font-size:.82rem">Soldaki formdan yeni bir destek talebi oluşturabilirsiniz.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div><!-- /view-support -->
+
+    </div><!-- /dash-content -->
+  </div><!-- /dashboard-layout -->
+</div><!-- /page-dashboard -->
+
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div style="font-size:1.3rem;font-weight:800;letter-spacing:-.02em;background:linear-gradient(135deg,var(--accent),var(--accent-bright));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:12px;display:block">Avalanche Gaming</div>
+        <p class="footer-desc">CS 1.6 JailBreak topluluğu. Güçlü topluluk, adil yönetim ve kaliteli oyun deneyimi.</p>
+        <div class="footer-socials">
+          <a href="#" class="social-icon" title="Discord"><i class="fa-brands fa-discord"></i></a>
+          <a href="#" class="social-icon" title="Steam"><i class="fa-brands fa-steam"></i></a>
+          <a href="#" class="social-icon" title="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Sayfalar</div>
+        <div class="footer-links">
+          <span class="footer-link" onclick="showPage('home')">Ana Sayfa</span>
+          <span class="footer-link" onclick="showPage('about')">Hakkımızda</span>
+          <span class="footer-link" onclick="showPage('rules')">Kurallar</span>
+          <span class="footer-link" onclick="showPage('announcements')">Duyurular</span>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Diğer</div>
+        <div class="footer-links">
+          <span class="footer-link" onclick="showPage('market')">Market</span>
+          <span class="footer-link" onclick="showPage('gallery')">Galeri</span>
+          <span class="footer-link" onclick="showPage('contact')">İletişim</span>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">İletişim</div>
+        <div class="footer-links">
+          <span class="footer-link">TS3: Avalanche</span>
+          <span class="footer-link">WA: 0535 963 21 65</span>
+          <span class="footer-link">7/24 Destek</span>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 Avalanche Gaming. Tüm hakları saklıdır.</span>
+      <span>CS 1.6 JailBreak Community</span>
+    </div>
+  </div>
+</footer>
+
+<script src="js/app.js"></script>
+<script src="js/forum.js"></script>
+</body>
+</html>
