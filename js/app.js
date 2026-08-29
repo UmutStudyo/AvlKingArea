@@ -751,6 +751,54 @@ function closeConfirm() {
 /* ─────────────────────────────────────────────
    AUTH SYSTEM
 ───────────────────────────────────────────── */
+const LOCAL_USERS_KEY = 'av-local-users';
+
+function readLocalUsers() {
+  try {
+    const users = JSON.parse(localStorage.getItem(LOCAL_USERS_KEY) || '[]');
+    return Array.isArray(users) ? users : [];
+  } catch (_) {
+    return [];
+  }
+}
+
+function writeLocalUsers(users) {
+  try { localStorage.setItem(LOCAL_USERS_KEY, JSON.stringify(users)); } catch (_) {}
+}
+
+// Vercel deployment is static, so /tables/* may be unavailable. Use the
+// hosted table API when present and fall back to same-origin local storage.
+async function loadAuthUsers() {
+  const localUsers = readLocalUsers();
+  try {
+    const r = await fetch('tables/av_users?limit=500');
+    if (!r.ok) throw new Error(`users endpoint returned ${r.status}`);
+    const d = await r.json();
+    const remoteUsers = Array.isArray(d.data) ? d.data : [];
+    const known = new Set(remoteUsers.map(u => u.id));
+    return remoteUsers.concat(localUsers.filter(u => !known.has(u.id)));
+  } catch (_) {
+    return localUsers;
+  }
+}
+
+async function saveAuthUser(user) {
+  try {
+    const r = await fetch('tables/av_users', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(user),
+    });
+    if (!r.ok) throw new Error(`users endpoint returned ${r.status}`);
+    return await r.json();
+  } catch (_) {
+    const users = readLocalUsers();
+    users.push(user);
+    writeLocalUsers(users);
+    return user;
+  }
+}
+
 async function doRegister() {
   const username = _val('reg-username');
   const fullname = _val('reg-fullname');
@@ -766,9 +814,7 @@ async function doRegister() {
   if (pass !== pass2)         return showToast('Şifreler eşleşmiyor', 'error');
   if (!captcha)               return showToast('Robot doğrulamasını tamamlayın', 'error');
 
-  // Check uniqueness against DB
-  const existing = await fetch('tables/av_users?limit=500').then(r => r.ok ? r.json() : { data: [] }).catch(() => ({ data: [] }));
-  const allUsers = existing.data || [];
+  const allUsers = await loadAuthUsers();
   if (allUsers.find(u => u.username?.toLowerCase() === username.toLowerCase())) return showToast('Kullanıcı adı alınmış', 'error');
   if (allUsers.find(u => u.email?.toLowerCase() === email.toLowerCase()))       return showToast('E-posta zaten kayıtlı', 'error');
 
@@ -780,12 +826,7 @@ async function doRegister() {
     last_seen: new Date().toISOString(),
   };
 
-  const r = await fetch('tables/av_users', {
-    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(user),
-  });
-  if (!r.ok) return showToast('Kayıt oluşturulamadı, tekrar deneyin', 'error');
-  const saved = await r.json();
-
+  const saved = await saveAuthUser(user);
   loginUser({ ...user, ...saved }, true);
   showToast('Hesabın oluşturuldu! Hoş geldin 🎉', 'success');
   loadCommunityStats();
@@ -800,9 +841,7 @@ async function doLogin() {
   if (!pass)      return showToast('Şifre gerekli', 'error');
   if (!captcha)   return showToast('Robot doğrulamasını tamamlayın', 'error');
 
-  const r = await fetch('tables/av_users?limit=500');
-  const d = r.ok ? await r.json() : { data: [] };
-  const allUsers = d.data || [];
+  const allUsers = await loadAuthUsers();
   const user = allUsers.find(u =>
     (u.username?.toLowerCase() === userInput.toLowerCase() || u.email?.toLowerCase() === userInput.toLowerCase()) && u.password === pass
   );
