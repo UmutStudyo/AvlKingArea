@@ -1620,9 +1620,11 @@ async function sendFriendRequest() {
   if (!State.currentUser) return showPage('login');
   if (name === State.currentUser.username) return showToast('Kendinize istek gönderemezsiniz', 'error');
 
-  const r = await fetch('tables/av_users?limit=500');
-  const d = r.ok ? await r.json() : { data: [] };
-  const target = (d.data || []).find(u => u.username === name);
+  const allUsers = await loadAuthUsers();
+  const normalizedName = name.toLocaleLowerCase('tr-TR');
+  const target = allUsers.find(u =>
+    (u.username || '').trim().toLocaleLowerCase('tr-TR') === normalizedName
+  );
   if (!target) return showToast('Kullanıcı bulunamadı', 'error');
 
   // Check already friends
